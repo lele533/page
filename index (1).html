@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Maciej — projektuję i wdrażam strony internetowe dla lokalnych biznesów i freelancerów." />
+  <title>Maciej — Strony internetowe dla lokalnych biznesów</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,700;1,9..144,300;1,9..144,400;1,9..144,700&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --cream:   #F4F0E8;
+      --ink:     #0D0C0A;
+      --accent:  #B13D27;
+      --muted:   #7B766F;
+      --border:  #D6D0C6;
+      --ff-d: 'Fraunces', Georgia, serif;
+      --ff-b: 'DM Sans', system-ui, sans-serif;
+    }
+
+    html { font-size: 16px; scroll-behavior: smooth; }
+
+    body {
+      background: var(--cream);
+      color: var(--ink);
+      font-family: var(--ff-b);
+      font-weight: 400;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    /* ── Grain overlay ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 999;
+      opacity: .025;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    }
+
+    /* ──────────────────────────────────────────
+       NAVBAR
+    ────────────────────────────────────────── */
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.4rem 2.5rem;
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      background: var(--cream);
+      z-index: 100;
+    }
+
+    .nav-name {
+      font-family: var(--ff-d);
+      font-size: 1rem;
+      font-weight: 400;
+      letter-spacing: .04em;
+    }
+
+    .nav-tag {
+      font-size: .7rem;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    /* ──────────────────────────────────────────
+       HERO
+    ────────────────────────────────────────── */
+    .hero {
+      min-height: calc(100dvh - 3.6rem);
+      display: grid;
+      grid-template-rows: 1fr auto;
+      padding: 0 2.5rem 2.5rem;
+    }
+
+    .hero-main {
+      display: grid;
+      grid-template-columns: 1fr clamp(220px, 28vw, 400px);
+      gap: 3rem;
+      align-items: center;
+      padding-top: clamp(3rem, 8vw, 7rem);
+    }
+
+    .hero-text { display: flex; flex-direction: column; }
+
+    .hero-label {
+      font-size: .7rem;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 2rem;
+      display: flex;
+      align-items: center;
+      gap: .8rem;
+    }
+
+    .hero-label::before {
+      content: '';
+      display: block;
+      width: 2rem;
+      height: 1px;
+      background: var(--muted);
+    }
+
+    .hero-headline {
+      font-family: var(--ff-d);
+      font-size: clamp(2.4rem, 6vw, 6.2rem);
+      line-height: 1.05;
+      font-weight: 300;
+      letter-spacing: -.02em;
+      max-width: 14ch;
+      margin-bottom: 0;
+    }
+
+    .hero-headline em {
+      font-style: italic;
+      font-weight: 400;
+      color: var(--accent);
+    }
+
+    .rotating-wrap {
+      display: inline-block;
+      overflow: hidden;
+      vertical-align: bottom;
+    }
+
+    .rotating-word {
+      display: inline-block;
+      font-style: italic;
+      font-weight: 400;
+      color: var(--accent);
+      transition: opacity .25s ease, transform .25s ease;
+    }
+
+    /* ── Photo column ── */
+    .hero-photo-wrap {
+      position: relative;
+      align-self: stretch;
+      display: flex;
+      align-items: flex-end;
+    }
+
+    .hero-photo {
+      width: 100%;
+      aspect-ratio: 3 / 4;
+      object-fit: cover;
+      object-position: center top;
+      display: block;
+      filter: grayscale(15%);
+    }
+
+    /* Placeholder shown when src is not set or missing */
+    .hero-photo-placeholder {
+      width: 100%;
+      aspect-ratio: 3 / 4;
+      border: 1.5px dashed var(--border);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: .7rem;
+      cursor: default;
+      background: color-mix(in srgb, var(--cream) 60%, white);
+    }
+
+    .hero-photo-placeholder svg { opacity: .3; }
+
+    .hero-photo-placeholder span {
+      font-size: .68rem;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--muted);
+      text-align: center;
+      line-height: 1.6;
+    }
+
+    .hero-photo-placeholder span em {
+      display: block;
+      font-style: normal;
+      font-size: .6rem;
+      opacity: .7;
+    }
+
+    .hero-bottom {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 2rem;
+      flex-wrap: wrap;
+      padding-top: 2rem;
+      border-top: 1px solid var(--border);
+    }
+
+    .hero-sub {
+      font-size: clamp(.85rem, 1.4vw, 1rem);
+      color: var(--muted);
+      max-width: 42ch;
+      line-height: 1.7;
+    }
+
+    .cta-link {
+      display: inline-flex;
+      align-items: center;
+      gap: .55rem;
+      font-family: var(--ff-b);
+      font-size: .85rem;
+      font-weight: 500;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      color: var(--cream);
+      background: var(--ink);
+      text-decoration: none;
+      padding: .85rem 1.8rem;
+      white-space: nowrap;
+      transition: background .2s ease, color .2s ease;
+    }
+
+    .cta-link:hover { background: var(--accent); }
+
+    .cta-link svg { transition: transform .2s ease; }
+    .cta-link:hover svg { transform: translateX(3px); }
+
+    /* ──────────────────────────────────────────
+       SECTION WRAPPER
+    ────────────────────────────────────────── */
+    .section {
+      padding: clamp(4rem, 8vw, 7rem) 2.5rem;
+      border-top: 1px solid var(--border);
+    }
+
+    .section-label {
+      font-size: .65rem;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 3.5rem;
+      display: flex;
+      align-items: center;
+      gap: .8rem;
+    }
+
+    .section-num {
+      font-family: var(--ff-d);
+      font-style: italic;
+      font-size: .8rem;
+      color: var(--accent);
+      margin-right: .2rem;
+    }
+
+    /* ──────────────────────────────────────────
+       SERVICES
+    ────────────────────────────────────────── */
+    .services-grid {
+      display: grid;
+      gap: 0;
+    }
+
+    .service-item {
+      display: grid;
+      grid-template-columns: 5rem 1fr;
+      gap: 0 2rem;
+      padding: 2.2rem 0;
+      border-bottom: 1px solid var(--border);
+      align-items: start;
+    }
+
+    .service-item:first-child { border-top: 1px solid var(--border); }
+
+    .service-num {
+      font-family: var(--ff-d);
+      font-size: 2.2rem;
+      font-weight: 300;
+      color: var(--border);
+      line-height: 1;
+      padding-top: .15rem;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .service-content {}
+
+    .service-name {
+      font-family: var(--ff-d);
+      font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+      font-weight: 400;
+      line-height: 1.2;
+      margin-bottom: .6rem;
+    }
+
+    .service-name em {
+      font-style: italic;
+      font-weight: 300;
+    }
+
+    .service-desc {
+      font-size: .85rem;
+      color: var(--muted);
+      max-width: 50ch;
+      line-height: 1.65;
+    }
+
+    /* ──────────────────────────────────────────
+       FOR WHO
+    ────────────────────────────────────────── */
+    .forwho-inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+      align-items: center;
+    }
+
+    .forwho-headline {
+      font-family: var(--ff-d);
+      font-size: clamp(1.6rem, 3.5vw, 2.8rem);
+      font-weight: 300;
+      line-height: 1.2;
+    }
+
+    .forwho-headline em {
+      font-style: italic;
+      font-weight: 400;
+    }
+
+    .forwho-right {}
+
+    .forwho-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .forwho-list li {
+      display: flex;
+      gap: 1rem;
+      font-size: .9rem;
+      line-height: 1.5;
+      color: var(--muted);
+    }
+
+    .forwho-list li::before {
+      content: '→';
+      color: var(--accent);
+      flex-shrink: 0;
+      font-size: .85rem;
+      margin-top: .05rem;
+    }
+
+    /* ──────────────────────────────────────────
+       CONTACT
+    ────────────────────────────────────────── */
+    .contact-inner {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 2rem;
+      align-items: end;
+    }
+
+    .contact-headline {
+      font-family: var(--ff-d);
+      font-size: clamp(2rem, 5vw, 4.5rem);
+      font-weight: 300;
+      line-height: 1.1;
+    }
+
+    .contact-headline em {
+      font-style: italic;
+      font-weight: 400;
+      color: var(--accent);
+    }
+
+    .contact-links {
+      display: flex;
+      flex-direction: column;
+      gap: .5rem;
+      align-items: flex-end;
+    }
+
+    .contact-link {
+      display: inline-flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .85rem;
+      font-weight: 500;
+      color: var(--ink);
+      text-decoration: none;
+      letter-spacing: .02em;
+      padding: .5rem 0;
+      border-bottom: 1px solid transparent;
+      transition: border-color .2s ease, color .2s ease;
+    }
+
+    .contact-link:hover { border-color: var(--ink); }
+
+    .contact-link .link-label {
+      font-size: .65rem;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      display: block;
+      text-align: right;
+      margin-bottom: .1rem;
+    }
+
+    .contact-link-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+    }
+
+    /* ──────────────────────────────────────────
+       FOOTER
+    ────────────────────────────────────────── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 1.4rem 2.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    footer span {
+      font-size: .7rem;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    footer a {
+      font-size: .7rem;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color .2s;
+    }
+
+    footer a:hover { color: var(--ink); }
+
+    /* ──────────────────────────────────────────
+       MOBILE
+    ────────────────────────────────────────── */
+    @media (max-width: 720px) {
+      .nav { padding: 1.1rem 1.2rem; }
+
+      .hero { padding: 0 1.2rem 2rem; min-height: auto; }
+      .hero-main { grid-template-columns: 1fr; padding-top: 2.2rem; gap: 2rem; }
+      .hero-photo-wrap { align-self: auto; }
+      .hero-photo, .hero-photo-placeholder { aspect-ratio: 4 / 3; width: 100%; }
+      .hero-bottom { flex-direction: column; align-items: flex-start; }
+
+      .section { padding: 3rem 1.2rem; }
+      .service-item { grid-template-columns: 3rem 1fr; gap: 0 1rem; }
+      .service-num { font-size: 1.6rem; }
+
+      .forwho-inner { grid-template-columns: 1fr; gap: 2rem; }
+      .contact-inner { grid-template-columns: 1fr; }
+      .contact-links { align-items: flex-start; }
+      .contact-link .link-label { text-align: left; }
+      .contact-link-wrap { align-items: flex-start; }
+
+      footer { padding: 1.2rem; flex-direction: column; align-items: flex-start; gap: .4rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── NAV ── -->
+  <nav class="nav" aria-label="Nawigacja główna">
+    <span class="nav-name">Maciej</span>
+    <span class="nav-tag">No.&thinsp;01 / 2026</span>
+  </nav>
+
+  <!-- ── HERO ── -->
+  <header class="hero">
+    <div class="hero-main">
+
+      <div class="hero-text">
+        <p class="hero-label">Informatyk · Strony WWW</p>
+        <h1 class="hero-headline">
+          Strony internetowe,<br>
+          dla <span class="rotating-wrap"><span class="rotating-word" aria-live="polite">lokalnych</span></span><br>
+          biznesów.
+        </h1>
+      </div>
+
+      <div class="hero-photo-wrap">
+        
+             <img src="john.jpg" alt="Maciej" class="hero-photo" />
+        
+        <div class="hero-photo-placeholder" aria-hidden="true">
+        
+          
+        </div>
+      </div>
+
+    </div>
+    <div class="hero-bottom">
+      <p class="hero-sub">
+        Projektuję i wdrażam strony, które pomagają małym firmom i freelancerom skutecznie zaistnieć w internecie i zdobywać nowych klientów.
+      </p>
+      <a href="mailto:sliwka533@gmail.com" class="cta-link" aria-label="Napisz do mnie — e-mail">
+        Napisz do mnie
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+          <path d="M1 7h12M8 2l5 5-5 5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </a>
+    </div>
+  </header>
+
+  <!-- ── SERVICES ── -->
+  <section class="section" aria-labelledby="services-heading">
+    <p class="section-label"><span class="section-num">02</span> Czym się zajmuję</p>
+    <div class="services-grid">
+
+      <article class="service-item">
+        <span class="service-num" aria-hidden="true">01</span>
+        <div class="service-content">
+          <h2 class="service-name">Landing page <em>od projektu do wdrożenia</em></h2>
+          <p class="service-desc">Strona zaprojektowana z myślą o Twoim kliencie — czytelna, szybka i gotowa do działania od pierwszego dnia.</p>
+        </div>
+      </article>
+
+      <article class="service-item">
+        <span class="service-num" aria-hidden="true">02</span>
+        <div class="service-content">
+          <h2 class="service-name">Copywriting <em>i struktura sprzedażowa</em></h2>
+          <p class="service-desc">Teksty, które wyjaśniają co robisz i przekonują do działania — bez branżowego żargonu i pustych frazesów.</p>
+        </div>
+      </article>
+
+      <article class="service-item">
+        <span class="service-num" aria-hidden="true">03</span>
+        <div class="service-content">
+          <h2 class="service-name">Formularz kontaktowy <em>i optymalizacja</em></h2>
+          <p class="service-desc">Działające formularze, podstawowe SEO i dostępność — żeby strona pracowała na Ciebie, nie odstraszała.</p>
+        </div>
+      </article>
+
+    </div>
+  </section>
+
+  <!-- ── FOR WHO ── -->
+  <section class="section" aria-labelledby="forwho-heading">
+    <p class="section-label"><span class="section-num">03</span> Dla kogo</p>
+    <div class="forwho-inner">
+      <h2 class="forwho-headline" id="forwho-heading">
+        Pracuję z firmami,<br>które chcą<br><em>być widoczne.</em>
+      </h2>
+      <div class="forwho-right">
+        <ul class="forwho-list">
+          <li>Małe lokalne firmy szukające pierwszej strony internetowej</li>
+          <li>Freelancerzy i usługodawcy bez aktualnej obecności w sieci</li>
+          <li>Biznesy, które mają stronę, ale nie przynosi im klientów</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── CONTACT ── -->
+  <section class="section" id="contact" aria-labelledby="contact-heading">
+    <p class="section-label"><span class="section-num">04</span> Kontakt</p>
+    <div class="contact-inner">
+      <h2 class="contact-headline" id="contact-heading">
+        Masz projekt?<br><em>Porozmawiajmy.</em>
+      </h2>
+      <div class="contact-links">
+
+        <div class="contact-link-wrap">
+          <span class="link-label">E-mail</span>
+          <a href="mailto:sliwka533@gmail.com" class="contact-link" aria-label="Napisz e-mail na adres sliwka533@gmail.com">
+            sliwka533@gmail.com
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
+              <path d="M1 11L11 1M11 1H4M11 1v7" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+            </svg>
+          </a>
+        </div>
+
+        <div class="contact-link-wrap">
+          <span class="link-label">WhatsApp</span>
+          <a href="https://wa.me/48519183787" class="contact-link" target="_blank" rel="noopener noreferrer" aria-label="Napisz na WhatsApp: 519 183 787">
+            +48 519 183 787
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
+              <path d="M1 11L11 1M11 1H4M11 1v7" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+            </svg>
+          </a>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ── FOOTER ── -->
+  <footer>
+    <span>© 2026 Maciej</span>
+    <a href="mailto:sliwka533@gmail.com">sliwka533@gmail.com</a>
+  </footer>
+
+  <script>
+    const words = ['lokalnych', 'małych', 'ambitnych', 'polskich'];
+    let idx = 0;
+    const el = document.querySelector('.rotating-word');
+
+    setInterval(() => {
+      el.style.opacity = '0';
+      el.style.transform = 'translateY(6px)';
+      setTimeout(() => {
+        idx = (idx + 1) % words.length;
+        el.textContent = words[idx];
+        el.style.opacity = '1';
+        el.style.transform = 'translateY(0)';
+      }, 280);
+    }, 2800);
+  </script>
+</body>
+</html>
